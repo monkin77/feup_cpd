@@ -1,4 +1,4 @@
-f = open("2.txt", "r")
+f = open("java_2.txt", "r")
 lines = f.readlines()
 gflops = []
 sizes = []
