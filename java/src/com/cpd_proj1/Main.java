@@ -54,7 +54,7 @@ public class Main {
     }
 
     // add code here for line x line matriz multiplication
-    void OnMultLine(int m_ar, int m_br)
+    static void OnMultLine(int m_ar, int m_br)
     {
         int i, j, k;
 
@@ -132,7 +132,7 @@ public class Main {
                     Main.OnMult(lin, col);
                     break;
                 case 2:
-                    // OnMultLine(lin, col);
+                    Main.OnMultLine(lin, col);
                     break;
                 case 3:
                     System.out.println("Block Size? ");
@@ -140,6 +140,6 @@ public class Main {
                     // OnMultBlock(lin, col, blockSize);
                     break;
             }
-        } while (op != 0);
+        } while (true);
     }
 }
