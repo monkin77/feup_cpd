@@ -4,7 +4,7 @@
 #include <time.h>
 #include <cstdlib>
 #include <papi.h>
-#include <cmath>
+#include <algorithm>
 
 using namespace std;
 
@@ -124,13 +124,14 @@ void OnMultLine(int m_ar, int m_br)
 }
 
 // add code here for block x block matriz multiplication
-void OnMultBlock(int m_ar, int m_br, int bkSize) {
+void OnMultBlock(int m_ar, int m_br, int bkSize)
+{
     SYSTEMTIME Time1, Time2;
 
     char st[100];
-    int i, j, k, i0, j0, k0;
-
     double temp;
+    int i, j, k, ii, jj, kk;
+
     double *pha, *phb, *phc;
 
     pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
@@ -145,22 +146,26 @@ void OnMultBlock(int m_ar, int m_br, int bkSize) {
         for (j = 0; j < m_br; j++)
             phb[i * m_br + j] = (double)(i + 1);
 
-    for (i = 0; i < m_ar; i++)
-        for (j = 0; j < m_ar; j++)
-            phc[i * m_ar + j] = (double)0;
+    for (i = 0; i < m_br; i++)
+        for (j = 0; j < m_br; j++)
+            phc[i * m_br + j] = (double)(0.0);
 
     Time1 = clock();
 
-     for (i0 = 0; i0 < m_ar; i0 += bkSize) {
-        for (j0 = 0; j0 < m_br; j0 += bkSize) {
-            for (k0 = 0; k0 < m_ar; k0 += bkSize) {
-                for (i = i0; i < min(i0+bkSize, m_ar); i++) {
-                    for (j = j0; j < min(j0+bkSize, m_br); j++) {
-                        temp = 0;
-                        for (k = k0; k < min(k0+bkSize, m_ar); k++) {
-                            temp += pha[i * m_ar + k] * phb[k * m_br + j];
+    for (ii = 0; ii < m_ar; ii += bkSize)
+    {
+        for (jj = 0; jj < m_br; jj += bkSize)
+        {
+            for (kk = 0; kk < m_ar; kk += bkSize)
+            {
+                for (i = ii; i < min(ii + bkSize, m_ar); i++)
+                {
+                    for (j = jj; j < min(jj + bkSize, m_br); j++)
+                    {
+                        for (k = kk; k < min(kk + bkSize, m_ar); k++)
+                        {
+                            phc[i * m_ar + j] += pha[i * m_ar + k] * phb[k * m_ar + j];
                         }
-                        phc[i * m_ar + j] = temp;
                     }
                 }
             }
