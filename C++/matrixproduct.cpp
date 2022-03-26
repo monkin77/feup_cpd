@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     int op;
 
     int EventSet = PAPI_NULL;
-    long long values[3];
+    long long values[5];
     int ret;
 
     ret = PAPI_library_init(PAPI_VER_CURRENT);
@@ -252,6 +252,14 @@ int main(int argc, char *argv[])
          cout << "ERROR: PAPI_L2_DCH" << endl;
   */
     ret = PAPI_add_event(EventSet, PAPI_L2_DCA);
+    if (ret != PAPI_OK)
+        cout << "ERROR: PAPI_L2_DCA" << endl;
+
+    ret = PAPI_add_event(EventSet, PAPI_LD_INS);
+    if (ret != PAPI_OK)
+        cout << "ERROR: PAPI_L2_DCA" << endl;
+
+    ret = PAPI_add_event(EventSet, PAPI_SR_INS);
     if (ret != PAPI_OK)
         cout << "ERROR: PAPI_L2_DCA" << endl;
 
@@ -296,6 +304,8 @@ int main(int argc, char *argv[])
         printf("L1 DCM: %lld \n", values[0]);
         printf("L2 DCM: %lld \n", values[1]);
         printf("L2 DCA: %lld \n", values[2]);
+        printf("LD INS: %lld \n", values[3]);
+        printf("SR INS: %lld \n", values[4]);
 
         ret = PAPI_reset(EventSet);
         if (ret != PAPI_OK)
@@ -320,6 +330,14 @@ int main(int argc, char *argv[])
      if (ret != PAPI_OK)
          std::cout << "FAIL remove event" << endl; */
     ret = PAPI_remove_event(EventSet, PAPI_L2_DCA);
+    if (ret != PAPI_OK)
+        std::cout << "FAIL remove event" << endl;
+
+    ret = PAPI_remove_event(EventSet, PAPI_LD_INS);
+    if (ret != PAPI_OK)
+        std::cout << "FAIL remove event" << endl;
+
+    ret = PAPI_remove_event(EventSet, PAPI_SR_INS);
     if (ret != PAPI_OK)
         std::cout << "FAIL remove event" << endl;
 
