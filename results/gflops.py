@@ -1,4 +1,4 @@
-f = open("c.txt", "r")
+f = open("c_512.txt", "r")
 lines = f.readlines()
 gflops = []
 sizes = []
