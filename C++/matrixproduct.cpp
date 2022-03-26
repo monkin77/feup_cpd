@@ -190,12 +190,14 @@ void OnMultBlock(int m_ar, int m_br, int bkSize)
     free(phc);
 }
 
-void handle_error(int retval) {
+void handle_error(int retval)
+{
     printf("PAPI error %d: %s\n", retval, PAPI_strerror(retval));
     exit(1);
 }
 
-void init_papi() {
+void init_papi()
+{
     int retval = PAPI_library_init(PAPI_VER_CURRENT);
     if (retval != PAPI_VER_CURRENT && retval < 0)
     {
@@ -218,7 +220,7 @@ int main(int argc, char *argv[])
     int op;
 
     int EventSet = PAPI_NULL;
-    long long values[2];
+    long long values[3];
     int ret;
 
     ret = PAPI_library_init(PAPI_VER_CURRENT);
@@ -233,9 +235,25 @@ int main(int argc, char *argv[])
     if (ret != PAPI_OK)
         cout << "ERROR: PAPI_L1_DCM" << endl;
 
+    /*  ret = PAPI_add_event(EventSet, PAPI_L1_DCH);
+     if (ret != PAPI_OK)
+         cout << "ERROR: PAPI_L1_DCH" << endl;
+
+     ret = PAPI_add_event(EventSet, PAPI_L1_DCA);
+     if (ret != PAPI_OK)
+         cout << "ERROR: PAPI_L1_DCA" << endl; */
+
     ret = PAPI_add_event(EventSet, PAPI_L2_DCM);
     if (ret != PAPI_OK)
         cout << "ERROR: PAPI_L2_DCM" << endl;
+
+    /*  ret = PAPI_add_event(EventSet, PAPI_L2_DCH);
+     if (ret != PAPI_OK)
+         cout << "ERROR: PAPI_L2_DCH" << endl;
+  */
+    ret = PAPI_add_event(EventSet, PAPI_L2_DCA);
+    if (ret != PAPI_OK)
+        cout << "ERROR: PAPI_L2_DCA" << endl;
 
     op = 1;
     do
@@ -277,6 +295,7 @@ int main(int argc, char *argv[])
             cout << "ERROR: Stop PAPI" << endl;
         printf("L1 DCM: %lld \n", values[0]);
         printf("L2 DCM: %lld \n", values[1]);
+        printf("L2 DCA: %lld \n", values[2]);
 
         ret = PAPI_reset(EventSet);
         if (ret != PAPI_OK)
@@ -287,8 +306,20 @@ int main(int argc, char *argv[])
     ret = PAPI_remove_event(EventSet, PAPI_L1_DCM);
     if (ret != PAPI_OK)
         std::cout << "FAIL remove event" << endl;
+    /*     ret = PAPI_remove_event(EventSet, PAPI_L1_DCH);
+        if (ret != PAPI_OK)
+            std::cout << "FAIL remove event" << endl;
+        ret = PAPI_remove_event(EventSet, PAPI_L1_DCA);
+        if (ret != PAPI_OK)
+            std::cout << "FAIL remove event" << endl; */
 
     ret = PAPI_remove_event(EventSet, PAPI_L2_DCM);
+    if (ret != PAPI_OK)
+        std::cout << "FAIL remove event" << endl;
+    /*  ret = PAPI_remove_event(EventSet, PAPI_L2_DCH);
+     if (ret != PAPI_OK)
+         std::cout << "FAIL remove event" << endl; */
+    ret = PAPI_remove_event(EventSet, PAPI_L2_DCA);
     if (ret != PAPI_OK)
         std::cout << "FAIL remove event" << endl;
 
